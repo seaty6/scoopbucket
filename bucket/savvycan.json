@@ -7,7 +7,7 @@
     "64bit": {
       "url": "https://github.com/collin80/SavvyCAN/releases/download/continuous/SavvyCAN-Windows_x64_CIBuild.zip",
       "extract_dir": "SavvyCAN",
-      "hash": "ignore"
+      "hash": "use --skip to install"
     }
   },
   "bin": "SavvyCAN.exe",
