@@ -1,0 +1,38 @@
+name: Update SavvyCAN Hash
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Daily at 6 AM UTC
+  workflow_dispatch:     # Allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download SavvyCAN zip
+        run: curl -L -o savvycan.zip https://github.com/collin80/SavvyCAN/releases/download/continuous/SavvyCAN-Windows_x64_CIBuild.zip
+
+      - name: Compute SHA256 hash
+        id: hash
+        run: |
+          HASH=$(sha256sum savvycan.zip | awk '{ print $1 }')
+          echo "sha256=$HASH" >> $GITHUB_OUTPUT
+
+      - name: Replace hash in manifest
+        run: |
+          sed -i "s/\"hash\": \".*\"/\"hash\": \"${{ steps.hash.outputs.sha256 }}\"/" bucket/savvycan.json
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          if ! git diff --quiet; then
+            git commit -am "Update SavvyCAN hash to ${{ steps.hash.outputs.sha256 }}"
+            git push
+          else
+            echo "No changes to commit"
+          fi
+
