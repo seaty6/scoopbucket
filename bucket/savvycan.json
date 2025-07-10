@@ -1,5 +1,5 @@
 {
-  "version": "continuous",
+  "version": "continuous-162239d6",
   "description": "SavvyCAN CAN bus analysis tool (Continuous Build)",
   "homepage": "https://github.com/collin80/SavvyCAN",
   "license": "GPL-3.0",
