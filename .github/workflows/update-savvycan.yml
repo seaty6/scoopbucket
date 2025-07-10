@@ -15,14 +15,17 @@ jobs:
       - name: Download SavvyCAN zip
         run: curl -L -o savvycan.zip https://github.com/collin80/SavvyCAN/releases/download/continuous/SavvyCAN-Windows_x64_CIBuild.zip
 
-      - name: Compute SHA256 hash
+      - name: Compute SHA256 hash and version
         id: hash
         run: |
           HASH=$(sha256sum savvycan.zip | awk '{ print $1 }')
+          SHORT=${HASH:0:8}
           echo "sha256=$HASH" >> $GITHUB_OUTPUT
+          echo "version=continuous-$SHORT" >> $GITHUB_OUTPUT
 
-      - name: Replace hash in manifest
+      - name: Replace hash and version in manifest
         run: |
+          sed -i "s/\"version\": \".*\"/\"version\": \"${{ steps.hash.outputs.version }}\"/" bucket/savvycan.json
           sed -i "s/\"hash\": \".*\"/\"hash\": \"${{ steps.hash.outputs.sha256 }}\"/" bucket/savvycan.json
 
       - name: Commit and push if changed
@@ -31,11 +34,9 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/${{ github.repository }}
           if ! git diff --quiet; then
-            git commit -am "Update SavvyCAN hash to ${{ steps.hash.outputs.sha256 }}"
+            git commit -am "Update SavvyCAN to ${{ steps.hash.outputs.version }}"
             git push https://x-access-token:$GH_TOKEN@github.com/${{ github.repository }} HEAD
           else
             echo "No changes to commit"
           fi
-
