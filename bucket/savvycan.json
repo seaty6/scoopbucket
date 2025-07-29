@@ -1,5 +1,5 @@
 {
-  "version": "continuous-162239d6",
+  "version": "continuous-34108f30",
   "description": "SavvyCAN CAN bus analysis tool (Continuous Build)",
   "homepage": "https://github.com/collin80/SavvyCAN",
   "license": "GPL-3.0",
@@ -7,7 +7,7 @@
     "64bit": {
       "url": "https://github.com/collin80/SavvyCAN/releases/download/continuous/SavvyCAN-Windows_x64_CIBuild.zip",
       "extract_dir": "SavvyCAN-Windows_x64",
-      "hash": "162239d66de84aa69d7619163746abfdd3d069b7328b45e3a327ef14610314d9"
+      "hash": "34108f30ef9cf9df80518e391de4a536e50b69367f9fc1cc51142ac5555a49b9"
     }
   },
   "bin": "SavvyCAN.exe",
